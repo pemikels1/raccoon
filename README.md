@@ -15,8 +15,17 @@ I used the pretrained Faster R-CNN ResNet 50 model from the torchvision library.
 
 ## Results
 After 25 epochs, I am get a mean IOU of 84% on the test set, as shown in the following graph:
+
 ![image](https://user-images.githubusercontent.com/26016287/123862549-191bcb00-d8ee-11eb-8683-ea0000c90fc6.png)
 
-Upon viewing the results, the model sometimes struggles to identify if there are two or more raccoons in the same image. An improvement would be to gather more images of multiple raccoons or use additional synthetic data techniques.
+Upon viewing the results, the model is generally doing very well (green box is ground truth, red box is prediction):
+
+![image](https://user-images.githubusercontent.com/26016287/123865183-3900be00-d8f1-11eb-9df4-a57eeeec859e.png)
+
+Sometimes, however, it struggles to identify if there are two or more raccoons in the same image:
+
+![image](https://user-images.githubusercontent.com/26016287/123865388-79f8d280-d8f1-11eb-916f-7adf011ad6c8.png)
+
+To improve model performance on images with multiple raccoons, I could gather more images of multiple raccoons, use additional synthetic data techniques such as a vertical flip or random crops on images of multiple raccoons, or better tune the non-maximum suppression hyperparameter.
 
 I plan to add metrics for the precision, recall, and F1 score in the future.

@@ -12,3 +12,11 @@ Each image is resized to 3 x 300 x 400.
 
 ## Model
 I used the pretrained Faster R-CNN ResNet 50 model from the torchvision library. I adapted the last layer to output two classes (raccoon or other).
+
+## Results
+After 25 epochs, I am get a mean IOU of 84% on the test set, as shown in the following graph:
+![image](https://user-images.githubusercontent.com/26016287/123862549-191bcb00-d8ee-11eb-8683-ea0000c90fc6.png)
+
+Upon viewing the results, the model sometimes struggles to identify if there are two or more raccoons in the same image. An improvement would be to gather more images of multiple raccoons or use additional synthetic data techniques.
+
+I plan to add metrics for the precision, recall, and F1 score in the future.

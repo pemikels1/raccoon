@@ -111,9 +111,23 @@ def main():
     # create the dataset, converting to xyxy coordinates from xywh coordinates
     dataset = ObjectDetectionDataSet(img_list_ordered, True, target_file, 'xyxy', resize, transform=transform)
 
+    # create a dataset of flipped images
     flipped_dataset = create_flipped_dataset(dataset, labels_ordered, torch_files_folder, resize, transform)
 
+    # concatenate the original dataset and the flipped dataset together to create a new dataset
     concat_dataset = ConcatDataset([dataset, flipped_dataset])
+
+    # calculate lengths for train and test sets
+    train_len = round(len(concat_dataset) * args.train_percentage)
+    test_len = len(concat_dataset) - train_len
+
+    # randomly split the current dataset into the train and test
+    train_dataset, test_dataset = random_split(concat_dataset, [train_len, test_len],
+                                               generator=torch.Generator().manual_seed(args.seed))
+
+    # create dataloader for train set
+    train_data_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=args.shuffle, num_workers=0,
+                                   generator=torch.Generator().manual_seed(args.seed), collate_fn=park_collate)
 
     # load pretrained model and change last layer to have 2 classes (raccoon or no raccoon)
     model = fasterrcnn_resnet50_fpn(pretrained=True)
@@ -125,21 +139,11 @@ def main():
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
     device = torch.device('cpu')
 
-    # calculate lengths for train and test sets
-    train_len = round(len(concat_dataset) * args.train_percentage)
-    test_len = len(concat_dataset) - train_len
-
-    # randomly split the current dataset into the train and test
-    train_dataset, test_dataset = random_split(concat_dataset, [train_len, test_len])
-
     # switch model to be on device
     model.to(device)
 
     # initialize optimizer
     optim = torch.optim.SGD(model.parameters(), lr=args.lr)
-
-    # create dataloader for train set
-    train_data_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=args.shuffle, num_workers=2, collate_fn=park_collate)
 
     best_avg_iou = float('-inf')
     start = time()

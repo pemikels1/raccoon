@@ -60,8 +60,8 @@ def get_iou(box_1, box_2):
     intersection_area = max(0, x_b - x_a + 1) * max(0, y_b - y_a)
 
     # calculate each box's area
-    box_a_area = (box_1_x_2 - box_1_x_1 + 1) * (box_1_y_2 - box_1_y_1 + 1)
-    box_b_area = (box_2_x_2 - box_2_x_1  + 1) * (box_2_y_2 - box_2_y_1 + 1)
+    box_a_area = (box_1_x_2 - box_1_x_1) * (box_1_y_2 - box_1_y_1)
+    box_b_area = (box_2_x_2 - box_2_x_1) * (box_2_y_2 - box_2_y_1)
 
     # calculate and return the intersection over union
     iou = intersection_area / (box_a_area + box_b_area - intersection_area)

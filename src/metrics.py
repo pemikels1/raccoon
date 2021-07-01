@@ -57,7 +57,7 @@ def get_iou(box_1, box_2):
 
     # calculate the intersection area
     # max 0 is in case the boxes do not overlap
-    intersection_area = max(0, x_b - x_a + 1) * max(0, y_b - y_a)
+    intersection_area = max(0, x_b - x_a) * max(0, y_b - y_a)
 
     # calculate each box's area
     box_a_area = (box_1_x_2 - box_1_x_1) * (box_1_y_2 - box_1_y_1)
